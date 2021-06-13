@@ -1,7 +1,7 @@
 import Express from 'express';
 import cors from 'cors';
 import logger from './utils/winston.js';
-import {buildText} from './naver.js'
+import {buildText} from './controller/searchKeyword.js'
 
 const app = Express();
 

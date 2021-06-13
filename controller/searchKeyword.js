@@ -1,9 +1,14 @@
-import {relatedKeywords, blogPosts, simpleLoad} from './ask.js';
+import relatedKeywords from '../service/relatedKeyword.js'
+import blogPosts from '../service/blogPost.js'
+import simpleLoad from '../service/simpleKeyword.js'
+
 import {subMonths} from 'date-fns';
 import numeral from 'numeral';
-import logger from './utils/winston.js';
+import logger from '../utils/winston.js';
 
-const buildText = async (keyList) => {
+
+// export {buildText} 
+export const buildText = async (keyList) => {
     var text = "—————————————";
     
     if(keyList.length === 1) {
@@ -100,4 +105,3 @@ const buildText = async (keyList) => {
     }  
   }
   
-export {buildText};

@@ -15,28 +15,51 @@ const generate_signature = (timestamp, method, path) => {
     return crypto.createHmac('sha256', KWD_API_SECRET_KEY).update(sign).digest("base64");
 }
 
+export async function keyword(query, timestamp, showDetail) {
+    const res = await Axios.request(
+        {
+            method: 'get',
+            url: 'https://api.naver.com/keywordstool',
+            params: {
+                hintKeywords: query,
+                showDetail: showDetail
+            },
+            headers: {
+                "Content-Type": 'application/json; charset=UTF-8',
+                "X-Timestamp": timestamp,
+                "X-API-KEY": KWD_API_ACCESS_LICENSE,
+                "X-Customer": KWD_API_CUSTOMER_ID_ID,
+                "X-Signature": generate_signature(timestamp, 'GET', '/keywordstool')        
+            }
+        }
+    );
+    return res;
+}
+
+export async function blogPost(query) {
+    const ans = await Axios.request(
+        {
+            method: 'get',
+            url: 'https://openapi.naver.com/v1/search/blog',
+            params: {
+                query: query,
+                display: 1
+            },
+            headers: {
+                "X-Naver-Client-Id": open_CLI_ID,
+                "X-Naver-Client-Secret": open_KEY,
+            }
+        }
+    );
+    return ans;
+}
+
 export const relatedKeywords = async (query) => {
     const timestamp = String(new Date().getTime());
 
     var ans;
     try {
-        ans = await Axios.request(
-            {
-                method: 'get',
-                url: 'https://api.naver.com/keywordstool',
-                params: {
-                    hintKeywords: query,
-                    showDetail: "1"
-                },
-                headers: {
-                    "Content-Type": 'application/json; charset=UTF-8',
-                    "X-Timestamp": timestamp,
-                    "X-API-KEY": KWD_API_ACCESS_LICENSE,
-                    "X-Customer": KWD_API_CUSTOMER_ID_ID,
-                    "X-Signature": generate_signature(timestamp, 'GET', '/keywordstool')        
-                }
-            }
-        );
+        ans = await keyword(query, timestamp, "1");
     } catch(err) {
         console.log(err);
         return [false, false, false];
@@ -91,23 +114,7 @@ export const simpleLoad = async (query) => {
     const looker = new Promise(async (re, rej) => {
         var ans;
         try {
-            ans = await Axios.request(
-                {
-                    method: 'get',
-                    url: 'https://api.naver.com/keywordstool',
-                    params: {
-                        hintKeywords: query.reduce((prev, cur) => prev + ',' + cur.trim()),
-                        showDetail: "0"
-                    },
-                    headers: {
-                        "Content-Type": 'application/json; charset=UTF-8',
-                        "X-Timestamp": timestamp,
-                        "X-API-KEY": KWD_API_ACCESS_LICENSE,
-                        "X-Customer": KWD_API_CUSTOMER_ID_ID,
-                        "X-Signature": generate_signature(timestamp, 'GET', '/keywordstool')        
-                    }
-                }
-            );
+            ans = await keyword(query.reduce((prev, cur) => prev + ',' + cur.trim()), timestamp, "1");
         } catch(err) {
             return re(false);
         }
@@ -136,20 +143,7 @@ export const simpleLoad = async (query) => {
 export const blogPosts = async (query) => {
     var ans;
     try {
-        ans = await Axios.request(
-            {
-                method: 'get',
-                url: 'https://openapi.naver.com/v1/search/blog',
-                params: {
-                    query: query,
-                    display: 1
-                },
-                headers: {
-                    "X-Naver-Client-Id": open_CLI_ID,
-                    "X-Naver-Client-Secret": open_KEY,
-                }
-            }
-        );
+        ans = await blogPost(query)
     } catch(err) {
         console.log(err);
         return 0;
