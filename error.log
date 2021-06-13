@@ -1,0 +1,4 @@
+{"time":"6/13/2021, 11:47:16 PM","from":"Error","level":"error","message":"server on port 3000"}
+{"time":"6/13/2021, 11:48:30 PM","from":"Error","level":"error","message":"uncaughtException: listen EADDRINUSE: address already in use :::3000Error: listen EADDRINUSE: address already in use :::3000    at Server.setupListenHandle [as _listen2] (net.js:1318:16)    at listenInCluster (net.js:1366:12)    at Server.listen (net.js:1452:7)    at Function.listen (/Users/distrue/naverLab/node_modules/express/lib/application.js:618:24)    at file:///Users/distrue/naverLab/app.js:36:5    at ModuleJob.run (internal/modules/esm/module_job.js:152:23)    at async Loader.import (internal/modules/esm/loader.js:177:24)    at async Object.loadESM (internal/process/esm_loader.js:68:5)"}
+{"time":"6/13/2021, 11:48:56 PM","from":"Error","level":"error","message":"server on port 3000"}
+{"time":"6/14/2021, 12:09:00 AM","from":"Error","level":"error","message":"server on port 3000"}
